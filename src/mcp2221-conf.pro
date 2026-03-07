@@ -38,3 +38,6 @@ FORMS += \
     mainwindow.ui
 
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    resources.qrc
