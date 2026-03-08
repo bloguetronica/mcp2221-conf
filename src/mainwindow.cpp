@@ -29,7 +29,7 @@
 #include "ui_mainwindow.h"
 
 // Definitions
-const int CENTRAL_HEIGHT = 171;
+const int CENTRAL_HEIGHT = 201;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -63,6 +63,22 @@ void MainWindow::on_actionAbout_triggered()
     showAboutDialog();  // See "common.h" and "common.cpp"
 }
 
+void MainWindow::on_checkBoxUnspecifiedDevice_clicked()
+{
+    if (ui->checkBoxUnspecifiedDevice->isChecked()) {
+        ui->comboBoxDevices->setCurrentIndex(0);
+    }
+    bool deviceSelectionEnabled = ui->lineEditVID->text().size() == 4 && ui->lineEditPID->text().size() == 4 && !ui->checkBoxUnspecifiedDevice->isChecked();
+    ui->comboBoxDevices->setEnabled(deviceSelectionEnabled);
+    ui->pushButtonRefresh->setEnabled(deviceSelectionEnabled);
+    ui->pushButtonOpen->setEnabled(ui->lineEditVID->text().size() == 4 && ui->lineEditPID->text().size() == 4 && ui->checkBoxUnspecifiedDevice->isChecked());
+}
+
+void MainWindow::on_comboBoxDevices_currentIndexChanged(int index)
+{
+    ui->pushButtonOpen->setEnabled(index != 0 || ui->checkBoxUnspecifiedDevice->isChecked());
+}
+
 void MainWindow::on_lineEditPID_textEdited(const QString &text)
 {
     int curPosition = ui->lineEditPID->cursorPosition();
@@ -77,6 +93,32 @@ void MainWindow::on_lineEditVID_textEdited(const QString &text)
     ui->lineEditVID->setText(text.toLower());
     ui->lineEditVID->setCursorPosition(curPosition);
     validateInput();
+}
+
+void MainWindow::on_pushButtonOpen_clicked()
+{
+    QString serialString = ui->comboBoxDevices->currentText();  // Extract the serial number from the chosen item in the combo box
+    QString usbIdString = QString("%1%2%3").arg(vid_, 4, 16, QChar('0')).arg(pid_, 4, 16, QChar('0')).arg(serialString);  // Unique identifier string for the USB device
+    ConfiguratorWindow *configuratorWindow;
+    if (configuratorWindowMap_.contains(usbIdString) && !configuratorWindowMap_[usbIdString].isNull() && (configuratorWindow = configuratorWindowMap_[usbIdString].data())->isViewEnabled()) {  // If the device is already mapped, and its window is open but not disabled
+        configuratorWindow->showNormal();  // Required if the corresponding device window is minimized
+        configuratorWindow->activateWindow();  // Set focus on the device window (window is raised and selected)
+    } else {
+        configuratorWindow = new ConfiguratorWindow(this);  // Create a new window that will close when its parent window closes
+        configuratorWindow->setAttribute(Qt::WA_DeleteOnClose);  // This will not only free the allocated memory once the window is closed, but will also automatically call the destructor of the respective device, which in turn closes it
+        if (ui->checkBoxUnspecifiedDevice->isChecked()) {
+            configuratorWindow->openDevice(vid_, pid_);  // Access a unspecified device and prepare its respective view
+        } else {
+            configuratorWindow->openDevice(vid_, pid_, serialString);  // Access the selected device and prepare its view
+        }
+        configuratorWindow->show();  // Then open the corresponding window
+        configuratorWindowMap_[usbIdString] = configuratorWindow;  // Map the device window, via a QPointer, to the unique identifier string of the device
+    }
+}
+
+void MainWindow::on_pushButtonRefresh_clicked()
+{
+    refresh();
 }
 
 // Refreshes the combo box list
@@ -103,12 +145,14 @@ void MainWindow::validateInput()
     if (vidstr.size() == 4 && pidstr.size() == 4) {
         vid_ = static_cast<quint16>(vidstr.toUInt(nullptr, 16));
         pid_ = static_cast<quint16>(pidstr.toUInt(nullptr, 16));
-        refresh();  // This has the "side effect" of disabling the "Open" button - Note that this is the intended behavior!
-        ui->comboBoxDevices->setEnabled(true);
-        ui->pushButtonRefresh->setEnabled(true);
+        refresh();  // If the "Unspecified device" checkbox is not checked, this has the "side effect" of disabling the "Open" button - Note that this is the intended behavior!
+        bool deviceSelectionEnabled = !ui->checkBoxUnspecifiedDevice->isChecked();
+        ui->comboBoxDevices->setEnabled(deviceSelectionEnabled);
+        ui->pushButtonRefresh->setEnabled(deviceSelectionEnabled);
     } else {
-        ui->comboBoxDevices->setCurrentIndex(0);  // This also disables the "Open" button
+        ui->comboBoxDevices->setCurrentIndex(0);
         ui->comboBoxDevices->setEnabled(false);
         ui->pushButtonRefresh->setEnabled(false);
+        ui->pushButtonOpen->setEnabled(false);
     }
 }

@@ -25,6 +25,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     aboutdialog.cpp \
     common.cpp \
+    configuratorwindow.cpp \
     libusb-extra.c \
     main.cpp \
     mainwindow.cpp \
@@ -33,12 +34,14 @@ SOURCES += \
 HEADERS += \
     aboutdialog.h \
     common.h \
+    configuratorwindow.h \
     libusb-extra.h \
     mainwindow.h \
     mcp2221.h
 
 FORMS += \
     aboutdialog.ui \
+    configuratorwindow.ui \
     mainwindow.ui
 
 LIBS += -lusb-1.0
