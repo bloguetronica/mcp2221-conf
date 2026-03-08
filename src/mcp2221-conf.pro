@@ -25,19 +25,25 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     aboutdialog.cpp \
     common.cpp \
+    libusb-extra.c \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    mcp2221.cpp
 
 HEADERS += \
     aboutdialog.h \
     common.h \
-    mainwindow.h
+    libusb-extra.h \
+    mainwindow.h \
+    mcp2221.h
 
 FORMS += \
     aboutdialog.ui \
     mainwindow.ui
 
-!isEmpty(target.path): INSTALLS += target
+LIBS += -lusb-1.0
 
 RESOURCES += \
     resources.qrc
+
+!isEmpty(target.path): INSTALLS += target

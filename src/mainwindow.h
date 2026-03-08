@@ -44,9 +44,15 @@ protected:
 
 private slots:
     void on_actionAbout_triggered();
+    void on_lineEditPID_textEdited(const QString &text);
+    void on_lineEditVID_textEdited(const QString &text);
 
 private:
     Ui::MainWindow *ui;
+    quint16 pid_, vid_;
+
+    void refresh();
+    void validateInput();
 };
 
 #endif  // MAINWINDOW_H

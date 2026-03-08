@@ -19,9 +19,12 @@
 
 
 // Includes
+#include <QMessageBox>
 #include <QRegExp>
 #include <QRegExpValidator>
+#include <QStringList>
 #include "common.h"
+#include "mcp2221.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -58,4 +61,54 @@ void MainWindow::resizeEvent(QResizeEvent *event)
 void MainWindow::on_actionAbout_triggered()
 {
     showAboutDialog();  // See "common.h" and "common.cpp"
+}
+
+void MainWindow::on_lineEditPID_textEdited(const QString &text)
+{
+    int curPosition = ui->lineEditPID->cursorPosition();
+    ui->lineEditPID->setText(text.toLower());
+    ui->lineEditPID->setCursorPosition(curPosition);
+    validateInput();
+}
+
+void MainWindow::on_lineEditVID_textEdited(const QString &text)
+{
+    int curPosition = ui->lineEditVID->cursorPosition();
+    ui->lineEditVID->setText(text.toLower());
+    ui->lineEditVID->setCursorPosition(curPosition);
+    validateInput();
+}
+
+// Refreshes the combo box list
+void MainWindow::refresh()
+{
+    int errcnt = 0;
+    QString errstr;
+    QStringList comboBoxList = {tr("Select device...")};
+    comboBoxList += MCP2221::listDevices(vid_, pid_, errcnt, errstr);
+    if (errcnt > 0) {
+        QMessageBox::critical(this, tr("Critical Error"), tr("%1\nThis is a critical error and execution will be aborted.").arg(errstr));
+        exit(EXIT_FAILURE);  // This error is critical because either libusb failed to initialize, or could not retrieve a list of devices
+    } else {
+        ui->comboBoxDevices->clear();
+        ui->comboBoxDevices->addItems(comboBoxList);
+    }
+}
+
+// Checks for valid user input, enabling or disabling the combo box and the "Refresh" button, accordingly
+void MainWindow::validateInput()
+{
+    QString vidstr = ui->lineEditVID->text();
+    QString pidstr = ui->lineEditPID->text();
+    if (vidstr.size() == 4 && pidstr.size() == 4) {
+        vid_ = static_cast<quint16>(vidstr.toUInt(nullptr, 16));
+        pid_ = static_cast<quint16>(pidstr.toUInt(nullptr, 16));
+        refresh();  // This has the "side effect" of disabling the "Open" button - Note that this is the intended behavior!
+        ui->comboBoxDevices->setEnabled(true);
+        ui->pushButtonRefresh->setEnabled(true);
+    } else {
+        ui->comboBoxDevices->setCurrentIndex(0);  // This also disables the "Open" button
+        ui->comboBoxDevices->setEnabled(false);
+        ui->pushButtonRefresh->setEnabled(false);
+    }
 }
