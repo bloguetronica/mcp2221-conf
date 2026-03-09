@@ -68,9 +68,8 @@ void MainWindow::on_checkBoxUnspecifiedDevice_clicked()
     if (ui->checkBoxUnspecifiedDevice->isChecked()) {
         ui->comboBoxDevices->setCurrentIndex(0);
     }
-    bool deviceSelectionEnabled = ui->lineEditVID->text().size() == 4 && ui->lineEditPID->text().size() == 4 && !ui->checkBoxUnspecifiedDevice->isChecked();
-    ui->comboBoxDevices->setEnabled(deviceSelectionEnabled);
-    ui->pushButtonRefresh->setEnabled(deviceSelectionEnabled);
+    ui->comboBoxDevices->setEnabled(ui->lineEditVID->text().size() == 4 && ui->lineEditPID->text().size() == 4 && !ui->checkBoxUnspecifiedDevice->isChecked());
+    ui->pushButtonRefresh->setEnabled(ui->lineEditVID->text().size() == 4 && ui->lineEditPID->text().size() == 4 && !ui->checkBoxUnspecifiedDevice->isChecked());
     ui->pushButtonOpen->setEnabled(ui->lineEditVID->text().size() == 4 && ui->lineEditPID->text().size() == 4 && ui->checkBoxUnspecifiedDevice->isChecked());
 }
 
@@ -146,9 +145,8 @@ void MainWindow::validateInput()
         vid_ = static_cast<quint16>(vidstr.toUInt(nullptr, 16));
         pid_ = static_cast<quint16>(pidstr.toUInt(nullptr, 16));
         refresh();  // If the "Unspecified device" checkbox is not checked, this has the "side effect" of disabling the "Open" button - Note that this is the intended behavior!
-        bool deviceSelectionEnabled = !ui->checkBoxUnspecifiedDevice->isChecked();
-        ui->comboBoxDevices->setEnabled(deviceSelectionEnabled);
-        ui->pushButtonRefresh->setEnabled(deviceSelectionEnabled);
+        ui->comboBoxDevices->setEnabled(!ui->checkBoxUnspecifiedDevice->isChecked());
+        ui->pushButtonRefresh->setEnabled(!ui->checkBoxUnspecifiedDevice->isChecked());
     } else {
         ui->comboBoxDevices->setCurrentIndex(0);
         ui->comboBoxDevices->setEnabled(false);
