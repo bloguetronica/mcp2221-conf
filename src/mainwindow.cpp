@@ -75,7 +75,7 @@ void MainWindow::on_checkBoxUnspecifiedDevice_clicked()
 
 void MainWindow::on_comboBoxDevices_currentIndexChanged(int index)
 {
-    ui->pushButtonOpen->setEnabled(index != 0 || ui->checkBoxUnspecifiedDevice->isChecked());  // The last condition is necessary in a case where contents of the VID and PID line edit boxes are edited while having the "Unspecified device" checkbox checked
+    ui->pushButtonOpen->setEnabled(index != 0 || ui->checkBoxUnspecifiedDevice->isChecked());  // The last condition is necessary in a case where contents of the "VID" and "PID" line edit boxes are edited while having the "Unspecified device" checkbox checked
 }
 
 void MainWindow::on_lineEditPID_textEdited(const QString &text)
