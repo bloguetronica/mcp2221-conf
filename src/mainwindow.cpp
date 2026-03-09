@@ -96,7 +96,10 @@ void MainWindow::on_lineEditVID_textEdited(const QString &text)
 
 void MainWindow::on_pushButtonOpen_clicked()
 {
-    QString serialString = ui->comboBoxDevices->currentText();  // Extract the serial number from the chosen item in the combo box
+    QString serialString;
+    if (!ui->checkBoxUnspecifiedDevice->isChecked()) {  // Any given device can only be mapped with a specific serial number if specifically selected
+        serialString = ui->comboBoxDevices->currentText();  // Extract the serial number from the chosen item in the combo box
+    }
     QString usbIdString = QString("%1%2%3").arg(vid_, 4, 16, QChar('0')).arg(pid_, 4, 16, QChar('0')).arg(serialString);  // Unique identifier string for the USB device
     ConfiguratorWindow *configuratorWindow;
     if (configuratorWindowMap_.contains(usbIdString) && !configuratorWindowMap_[usbIdString].isNull() && (configuratorWindow = configuratorWindowMap_[usbIdString].data())->isViewEnabled()) {  // If the device is already mapped, and its window is open but not disabled
@@ -105,8 +108,8 @@ void MainWindow::on_pushButtonOpen_clicked()
     } else {
         configuratorWindow = new ConfiguratorWindow(this);  // Create a new window that will close when its parent window closes
         configuratorWindow->setAttribute(Qt::WA_DeleteOnClose);  // This will not only free the allocated memory once the window is closed, but will also automatically call the destructor of the respective device, which in turn closes it
-        if (ui->checkBoxUnspecifiedDevice->isChecked()) {
-            configuratorWindow->openDevice(vid_, pid_);  // Access a unspecified device and prepare its respective view
+        if (ui->checkBoxUnspecifiedDevice->isChecked()) {  // If no specific device is selected (useful for new devices with no serial number)
+            configuratorWindow->openDevice(vid_, pid_);  // Access the first found device and prepare its respective view
         } else {
             configuratorWindow->openDevice(vid_, pid_, serialString);  // Access the selected device and prepare its view
         }
