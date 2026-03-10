@@ -29,7 +29,7 @@
 #include "ui_mainwindow.h"
 
 // Definitions
-const int CENTRAL_HEIGHT = 201;
+const int CENTRAL_HEIGHT = 171;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
