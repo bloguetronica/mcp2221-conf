@@ -40,6 +40,9 @@ public:
     bool isViewEnabled();
     void openDevice(quint16 vid, quint16 pid, const QString &serialString);
 
+private slots:
+    void on_actionAbout_triggered();
+
 private:
     Ui::ConfiguratorWindow *ui;
     MCP2221 mcp2221_;

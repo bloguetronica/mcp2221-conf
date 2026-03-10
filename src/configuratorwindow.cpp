@@ -20,6 +20,7 @@
 
 // Includes
 #include <QMessageBox>
+#include "common.h"
 #include "configuratorwindow.h"
 #include "ui_configuratorwindow.h"
 
@@ -68,6 +69,11 @@ void ConfiguratorWindow::openDevice(quint16 vid, quint16 pid, const QString &ser
         }
         this->deleteLater();  // Close window after the subsequent show() call
     }
+}
+
+void ConfiguratorWindow::on_actionAbout_triggered()
+{
+    showAboutDialog();  // See "common.h" and "common.cpp"
 }
 
 // Partially disables configurator window
