@@ -39,7 +39,7 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
+    explicit MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
 protected:
@@ -48,7 +48,6 @@ protected:
 
 private slots:
     void on_actionAbout_triggered();
-    void on_checkBoxUnspecifiedDevice_clicked();
     void on_comboBoxDevices_currentIndexChanged(int index);
     void on_lineEditPID_textEdited(const QString &text);
     void on_lineEditVID_textEdited(const QString &text);

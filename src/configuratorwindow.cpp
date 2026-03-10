@@ -52,9 +52,7 @@ void ConfiguratorWindow::openDevice(quint16 vid, quint16 pid, const QString &ser
             handleError();
             this->deleteLater();  // Close window after the subsequent show() call
         } else {  // Device is now open
-            if (!serialString.isNull()) {
-                this->setWindowTitle(tr("MCP2221 Device (S/N: %1)").arg(serialString));
-            }
+            this->setWindowTitle(tr("MCP2221 Device (S/N: %1)").arg(serialString));
             //displayConfiguration(deviceConfiguration_, FULL_UPDATE);
             serialString_ = serialString;  // Pass the serial number
             viewEnabled_ = true;
