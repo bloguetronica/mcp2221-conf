@@ -38,7 +38,7 @@ public:
     ~ConfiguratorWindow();
 
     bool isViewEnabled();
-    void openDevice(quint16 vid, quint16 pid, const QString &serialString = QString());
+    void openDevice(quint16 vid, quint16 pid, const QString &serialString);
 
 private:
     Ui::ConfiguratorWindow *ui;
