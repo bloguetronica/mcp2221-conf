@@ -24,8 +24,8 @@
      inkscape:document-units="px"
      showgrid="false"
      inkscape:zoom="6.3950178"
-     inkscape:cx="140.5"
-     inkscape:cy="20.562883"
+     inkscape:cx="140.65637"
+     inkscape:cy="21.188369"
      inkscape:window-width="1920"
      inkscape:window-height="1012"
      inkscape:window-x="0"
@@ -36,9 +36,7 @@
      inkscape:deskcolor="#d1d1d1">
     <inkscape:grid
        type="xygrid"
-       id="grid999"
-       originx="-2.5"
-       originy="-3.5" />
+       id="grid999" />
   </sodipodi:namedview>
   <defs
      id="defs931" />
@@ -67,13 +65,14 @@
          y="18.345703">MCP2221</tspan></text>
     <text
        xml:space="preserve"
-       style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:21.0667px;line-height:1.25;font-family:Figtree;-inkscape-font-specification:'Figtree, Heavy';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none"
-       x="55.389797"
-       y="31.752546"
+       style="font-style:normal;font-variant:normal;font-weight:900;font-stretch:normal;font-size:21.1829px;line-height:1.25;font-family:Figtree;-inkscape-font-specification:'Figtree, Heavy';font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-variant-east-asian:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1.00551"
+       x="54.131599"
+       y="31.795307"
        id="text32"><tspan
          sodipodi:role="line"
          id="tspan34"
-         x="55.389797"
-         y="31.752546">MCP2221 Configurator</tspan></text>
+         x="54.131599"
+         y="31.795307"
+         style="stroke-width:1.00551">MCP2221 Configurator</tspan></text>
   </g>
 </svg>
