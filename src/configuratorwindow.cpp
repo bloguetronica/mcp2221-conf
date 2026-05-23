@@ -20,6 +20,8 @@
 
 // Includes
 #include <QMessageBox>
+#include <QRegExp>
+#include <QRegExpValidator>
 #include "common.h"
 #include "configuratorwindow.h"
 #include "ui_configuratorwindow.h"
@@ -29,6 +31,8 @@ ConfiguratorWindow::ConfiguratorWindow(QWidget *parent) :
     ui(new Ui::ConfiguratorWindow)
 {
     ui->setupUi(this);
+    ui->lineEditVID->setValidator(new QRegExpValidator(QRegExp("[A-Fa-f\\d]+"), this));
+    ui->lineEditPID->setValidator(new QRegExpValidator(QRegExp("[A-Fa-f\\d]+"), this));
 }
 
 ConfiguratorWindow::~ConfiguratorWindow()
@@ -54,7 +58,7 @@ void ConfiguratorWindow::openDevice(quint16 vid, quint16 pid, const QString &ser
             this->deleteLater();  // Close window after the subsequent show() call
         } else {  // Device is now open
             this->setWindowTitle(tr("MCP2221 Device (S/N: %1)").arg(serialString));
-            //displayConfiguration(deviceConfiguration_, FULL_UPDATE);
+            displayConfiguration(deviceConfiguration_);
             serialString_ = serialString;  // Pass the serial number
             viewEnabled_ = true;
         }
@@ -88,6 +92,49 @@ void ConfiguratorWindow::disableView()
     viewEnabled_ = false;
 }
 
+// Updates all fields pertaining to USB parameters
+void ConfiguratorWindow::displayChipSettings(const MCP2221::ChipSettings &chipSettings)
+{
+    displayUSBParameters(chipSettings.usb);
+    // TODO
+}
+
+// This is the main display routine, used to display the given configuration, updating all fields accordingly
+void ConfiguratorWindow::displayConfiguration(const Configuration &configuration)
+{
+    displayManufacturer(configuration.manufacturer);
+    displayProduct(configuration.product);
+    displaySerial(configuration.serial);
+    displayChipSettings(configuration.chipSettings);
+    // TODO
+}
+
+// Updates the manufacturer descriptor field
+void ConfiguratorWindow::displayManufacturer(const QString &manufacturer)
+{
+    ui->lineEditManufacturer->setText(manufacturer);
+}
+
+// Updates the product descriptor field
+void ConfiguratorWindow::displayProduct(const QString &product)
+{
+    ui->lineEditProduct->setText(product);
+}
+
+// Updates the serial descriptor field
+void ConfiguratorWindow::displaySerial(const QString &serial)
+{
+    ui->lineEditSerial->setText(serial);
+}
+
+// Updates all fields pertaining to USB parameters
+void ConfiguratorWindow::displayUSBParameters(const MCP2221::USBParameters &usbParameters)
+{
+    ui->lineEditVID->setText(QString("%1").arg(usbParameters.vid, 4, 16, QChar('0')));  // This will autofill with up to four leading zeros
+    ui->lineEditPID->setText(QString("%1").arg(usbParameters.pid, 4, 16, QChar('0')));  // Same as before
+    // TODO
+}
+
 // Determines the type of error and acts accordingly, always showing a message
 void ConfiguratorWindow::handleError()
 {
@@ -103,8 +150,10 @@ void ConfiguratorWindow::readDeviceConfiguration()
 {
     int errcnt = 0;
     QString errstr;
-    //deviceConfiguration_.manufacturer = mcp2221_.getManufacturerDesc(errcnt, errstr);
-    //deviceConfiguration_.product = mcp2221_.getProductDesc(errcnt, errstr);
+    deviceConfiguration_.manufacturer = mcp2221_.getManufacturerDesc(errcnt, errstr);
+    deviceConfiguration_.product = mcp2221_.getProductDesc(errcnt, errstr);
+    deviceConfiguration_.serial = mcp2221_.getSerialDesc(errcnt, errstr);
+    deviceConfiguration_.chipSettings = mcp2221_.getChipSettings(errcnt, errstr);
     validateOperation(tr("read device configuration"), errcnt, errstr);
 }
 

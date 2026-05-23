@@ -23,6 +23,8 @@
 
 // Includes
 #include <QMainWindow>
+#include <QString>
+#include "configuration.h"
 #include "mcp2221.h"
 
 namespace Ui {
@@ -45,11 +47,18 @@ private slots:
 
 private:
     Ui::ConfiguratorWindow *ui;
+    Configuration deviceConfiguration_;
     MCP2221 mcp2221_;
     QString errmsg_, serialString_;
     bool err_, viewEnabled_ = false;
 
     void disableView();
+    void displayChipSettings(const MCP2221::ChipSettings &chipSettings);
+    void displayConfiguration(const Configuration &configuration);
+    void displayManufacturer(const QString &manufacturer);
+    void displayProduct(const QString &product);
+    void displaySerial(const QString &serial);
+    void displayUSBParameters(const MCP2221::USBParameters &usbParameters);
     void handleError();
     void readDeviceConfiguration();
     void validateOperation(const QString &operation, int errcnt, QString errstr);

@@ -27,7 +27,196 @@
   <property name="locale">
    <locale language="English" country="UnitedStates"/>
   </property>
-  <widget class="QWidget" name="centralWidget"/>
+  <widget class="QWidget" name="centralWidget">
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>459</width>
+      <height>518</height>
+     </rect>
+    </property>
+    <widget class="QWidget" name="tabGeneral">
+     <attribute name="title">
+      <string>General</string>
+     </attribute>
+     <widget class="QLabel" name="labelManufacturer">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>17</y>
+        <width>105</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Manufacturer:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEditManufacturer">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>10</y>
+        <width>321</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="maxLength">
+       <number>30</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelProduct">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>57</y>
+        <width>105</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Product:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEditProduct">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>50</y>
+        <width>321</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="maxLength">
+       <number>30</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelSerial">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>97</y>
+        <width>105</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Serial:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEditSerial">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>90</y>
+        <width>281</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="maxLength">
+       <number>30</number>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pushButtonGenerateSerial">
+      <property name="geometry">
+       <rect>
+        <x>410</x>
+        <y>90</y>
+        <width>31</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset resource="resources.qrc">
+        <normaloff>:/icons/buttons/icons/buttons/cycle.png</normaloff>:/icons/buttons/icons/buttons/cycle.png</iconset>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelPID">
+      <property name="geometry">
+       <rect>
+        <x>230</x>
+        <y>137</y>
+        <width>105</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Product ID:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLabel" name="labelVID">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>137</y>
+        <width>105</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Vendor ID:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEditVID">
+      <property name="geometry">
+       <rect>
+        <x>120</x>
+        <y>130</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="maxLength">
+       <number>4</number>
+      </property>
+      <property name="placeholderText">
+       <string>0x</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEditPID">
+      <property name="geometry">
+       <rect>
+        <x>340</x>
+        <y>130</y>
+        <width>101</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="maxLength">
+       <number>4</number>
+      </property>
+      <property name="placeholderText">
+       <string>0x</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <attribute name="title">
+      <string>Tab 2</string>
+     </attribute>
+    </widget>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
