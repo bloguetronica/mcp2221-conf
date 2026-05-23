@@ -92,7 +92,7 @@ void ConfiguratorWindow::disableView()
     viewEnabled_ = false;
 }
 
-// Updates all fields pertaining to USB parameters
+// Updates all fields pertaining to the MCP2221 chip settings
 void ConfiguratorWindow::displayChipSettings(const MCP2221::ChipSettings &chipSettings)
 {
     displayUSBParameters(chipSettings.usb);
