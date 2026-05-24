@@ -80,6 +80,38 @@ void ConfiguratorWindow::on_actionAbout_triggered()
     showAboutDialog();  // See "common.h" and "common.cpp"
 }
 
+void ConfiguratorWindow::on_lineEditPID_textChanged(const QString &text)
+{
+    if (text.size() < 4 || text == "0000") {
+        ui->lineEditPID->setStyleSheet("background: rgb(255, 204, 0);");
+    } else {
+        ui->lineEditPID->setStyleSheet("");
+    }
+}
+
+void ConfiguratorWindow::on_lineEditPID_textEdited(const QString &text)
+{
+    int curPosition = ui->lineEditPID->cursorPosition();
+    ui->lineEditPID->setText(text.toLower());
+    ui->lineEditPID->setCursorPosition(curPosition);
+}
+
+void ConfiguratorWindow::on_lineEditVID_textChanged(const QString &text)
+{
+    if (text.size() < 4 || text == "0000") {
+        ui->lineEditVID->setStyleSheet("background: rgb(255, 204, 0);");
+    } else {
+        ui->lineEditVID->setStyleSheet("");
+    }
+}
+
+void ConfiguratorWindow::on_lineEditVID_textEdited(const QString &text)
+{
+    int curPosition = ui->lineEditVID->cursorPosition();
+    ui->lineEditVID->setText(text.toLower());
+    ui->lineEditVID->setCursorPosition(curPosition);
+}
+
 // Partially disables configurator window
 void ConfiguratorWindow::disableView()
 {
@@ -158,6 +190,19 @@ void ConfiguratorWindow::readDeviceConfiguration()
     deviceConfiguration_.serial = mcp2221_.getSerialDesc(errcnt, errstr);
     deviceConfiguration_.chipSettings = mcp2221_.getChipSettings(errcnt, errstr);
     validateOperation(tr("read device configuration"), errcnt, errstr);
+}
+
+// Enables or disables all fields pertaining to general settings
+void ConfiguratorWindow::setGeneralSettingsEnabled(bool value)
+{
+    ui->lineEditManufacturer->setReadOnly(!value);
+    ui->lineEditProduct->setReadOnly(!value);
+    ui->lineEditVID->setReadOnly(!value);
+    ui->lineEditPID->setReadOnly(!value);
+    ui->lineEditMaxPower->setReadOnly(!value);
+    ui->lineEditMaxPowerHex->setReadOnly(!value);
+    ui->comboBoxPowerMode->setEnabled(value);
+    // TODO
 }
 
 // Checks for errors and validates device operations

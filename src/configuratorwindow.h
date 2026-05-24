@@ -44,6 +44,10 @@ public:
 
 private slots:
     void on_actionAbout_triggered();
+    void on_lineEditPID_textChanged(const QString &text);
+    void on_lineEditPID_textEdited(const QString &text);
+    void on_lineEditVID_textChanged(const QString &text);
+    void on_lineEditVID_textEdited(const QString &text);
 
 private:
     Ui::ConfiguratorWindow *ui;
@@ -61,6 +65,7 @@ private:
     void displayUSBParameters(const MCP2221::USBParameters &usbParameters);
     void handleError();
     void readDeviceConfiguration();
+    void setGeneralSettingsEnabled(bool value);
     void validateOperation(const QString &operation, int errcnt, QString errstr);
 };
 
