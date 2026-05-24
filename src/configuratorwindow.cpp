@@ -132,6 +132,9 @@ void ConfiguratorWindow::displayUSBParameters(const MCP2221::USBParameters &usbP
 {
     ui->lineEditVID->setText(QString("%1").arg(usbParameters.vid, 4, 16, QChar('0')));  // This will autofill with up to four leading zeros
     ui->lineEditPID->setText(QString("%1").arg(usbParameters.pid, 4, 16, QChar('0')));  // Same as before
+    ui->lineEditMaxPower->setText(QString::number(2 * usbParameters.maxpow));
+    ui->lineEditMaxPowerHex->setText(QString("%1").arg(usbParameters.maxpow, 2, 16, QChar('0')));  // This will autofill with up to two leading zeros
+    ui->comboBoxPowerMode->setCurrentIndex(usbParameters.powmode);
     // TODO
 }
 
