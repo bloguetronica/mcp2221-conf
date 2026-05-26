@@ -31,6 +31,7 @@ struct Configuration
     QString product;
     QString serial;
     MCP2221::ChipSettings chipSettings;
+    MCP2221::SecurityOptions securityOptions;
 
     bool operator ==(const Configuration &other) const;
     bool operator !=(const Configuration &other) const;

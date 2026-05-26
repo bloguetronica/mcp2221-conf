@@ -58,9 +58,10 @@ private:
 
     void disableView();
     void displayChipSettings(const MCP2221::ChipSettings &chipSettings);
-    void displayConfiguration(const Configuration &configuration);
+    void displayConfiguration(const Configuration &configuration, bool fullUpdate);
     void displayManufacturer(const QString &manufacturer);
     void displayProduct(const QString &product);
+    void displaySecurityOptions(const MCP2221::SecurityOptions &securityOptions);
     void displaySerial(const QString &serial);
     void displayUSBParameters(const MCP2221::USBParameters &usbParameters);
     void handleError();

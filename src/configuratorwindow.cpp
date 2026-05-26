@@ -26,6 +26,10 @@
 #include "configuratorwindow.h"
 #include "ui_configuratorwindow.h"
 
+// The following values are applicable to displayConfiguration()
+const bool FULL_UPDATE= true;
+const bool PARTIAL_UPDATE = false;
+
 ConfiguratorWindow::ConfiguratorWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::ConfiguratorWindow)
@@ -58,7 +62,7 @@ void ConfiguratorWindow::openDevice(quint16 vid, quint16 pid, const QString &ser
             this->deleteLater();  // Close window after the subsequent show() call
         } else {  // Device is now open
             this->setWindowTitle(tr("MCP2221 Device (S/N: %1)").arg(serialString));
-            displayConfiguration(deviceConfiguration_);
+            displayConfiguration(deviceConfiguration_, FULL_UPDATE);
             serialString_ = serialString;  // Pass the serial number
             viewEnabled_ = true;
         }
@@ -132,13 +136,19 @@ void ConfiguratorWindow::displayChipSettings(const MCP2221::ChipSettings &chipSe
 }
 
 // This is the main display routine, used to display the given configuration, updating all fields accordingly
-void ConfiguratorWindow::displayConfiguration(const Configuration &configuration)
+void ConfiguratorWindow::displayConfiguration(const Configuration &configuration, bool fullUpdate)
 {
     displayManufacturer(configuration.manufacturer);
     displayProduct(configuration.product);
     displaySerial(configuration.serial);
+    displaySecurityOptions(configuration.securityOptions);
     displayChipSettings(configuration.chipSettings);
     // TODO
+    if (fullUpdate) {
+        // TODO
+        setGeneralSettingsEnabled(!configuration.securityOptions.lock);
+        // TODO
+    }
 }
 
 // Updates the manufacturer descriptor field
@@ -151,6 +161,12 @@ void ConfiguratorWindow::displayManufacturer(const QString &manufacturer)
 void ConfiguratorWindow::displayProduct(const QString &product)
 {
     ui->lineEditProduct->setText(product);
+}
+
+// TODO
+void ConfiguratorWindow::displaySecurityOptions(const MCP2221::SecurityOptions &securityOptions)
+{
+    // TODO
 }
 
 // Updates the serial descriptor field
@@ -189,6 +205,7 @@ void ConfiguratorWindow::readDeviceConfiguration()
     deviceConfiguration_.product = mcp2221_.getProductDesc(errcnt, errstr);
     deviceConfiguration_.serial = mcp2221_.getSerialDesc(errcnt, errstr);
     deviceConfiguration_.chipSettings = mcp2221_.getChipSettings(errcnt, errstr);
+    deviceConfiguration_.securityOptions = mcp2221_.getSecurityOptions(errcnt, errstr);
     validateOperation(tr("read device configuration"), errcnt, errstr);
 }
 
@@ -197,6 +214,8 @@ void ConfiguratorWindow::setGeneralSettingsEnabled(bool value)
 {
     ui->lineEditManufacturer->setReadOnly(!value);
     ui->lineEditProduct->setReadOnly(!value);
+    ui->lineEditSerial->setReadOnly(!value);
+    ui->pushButtonGenerateSerial->setEnabled(value);
     ui->lineEditVID->setReadOnly(!value);
     ui->lineEditPID->setReadOnly(!value);
     ui->lineEditMaxPower->setReadOnly(!value);

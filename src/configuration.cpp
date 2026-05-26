@@ -24,7 +24,7 @@
 // "Equal to" operator for Configuration
 bool Configuration::operator ==(const Configuration &other) const
 {
-    return manufacturer == other.manufacturer && product == other.product && serial == other.serial && chipSettings == other.chipSettings;
+    return manufacturer == other.manufacturer && product == other.product && serial == other.serial && chipSettings == other.chipSettings && securityOptions == other.securityOptions;
 }
 
 // "Not equal to" operator for Configuration
