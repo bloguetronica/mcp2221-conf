@@ -84,6 +84,11 @@ void ConfiguratorWindow::on_actionAbout_triggered()
     showAboutDialog();  // See "common.h" and "common.cpp"
 }
 
+void ConfiguratorWindow::on_actionSerialGeneratorEnable_toggled(bool checked)
+{
+    ui->pushButtonGenerateSerial->setEnabled(checked);
+}
+
 void ConfiguratorWindow::on_lineEditPID_textChanged(const QString &text)
 {
     if (text.size() < 4 || text == "0000") {
@@ -212,10 +217,13 @@ void ConfiguratorWindow::readDeviceConfiguration()
 // Enables or disables all fields pertaining to general settings
 void ConfiguratorWindow::setGeneralSettingsEnabled(bool value)
 {
+    if (!value) {
+        ui->actionSerialGeneratorEnable->setChecked(false);  // This also disables pushButtonGenerateSerial
+    }
+    ui->actionSerialGeneratorEnable->setEnabled(value);
     ui->lineEditManufacturer->setReadOnly(!value);
     ui->lineEditProduct->setReadOnly(!value);
     ui->lineEditSerial->setReadOnly(!value);
-    ui->pushButtonGenerateSerial->setEnabled(value);
     ui->lineEditVID->setReadOnly(!value);
     ui->lineEditPID->setReadOnly(!value);
     ui->lineEditMaxPower->setReadOnly(!value);
