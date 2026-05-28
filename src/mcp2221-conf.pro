@@ -30,7 +30,8 @@ SOURCES += \
     libusb-extra.c \
     main.cpp \
     mainwindow.cpp \
-    mcp2221.cpp
+    mcp2221.cpp \
+    serialgenerator.cpp
 
 HEADERS += \
     aboutdialog.h \
@@ -39,7 +40,8 @@ HEADERS += \
     configuratorwindow.h \
     libusb-extra.h \
     mainwindow.h \
-    mcp2221.h
+    mcp2221.h \
+    serialgenerator.h
 
 FORMS += \
     aboutdialog.ui \
