@@ -23,6 +23,7 @@
 #include <QRegExp>
 #include <QRegExpValidator>
 #include "common.h"
+#include "serialgeneratordialog.h"
 #include "configuratorwindow.h"
 #include "ui_configuratorwindow.h"
 
@@ -89,6 +90,33 @@ void ConfiguratorWindow::on_actionSerialGeneratorEnable_toggled(bool checked)
     ui->pushButtonGenerateSerial->setEnabled(checked);
 }
 
+void ConfiguratorWindow::on_actionSerialGeneratorSettings_triggered()
+{
+    SerialGeneratorDialog serialGeneratorDialog(this);
+    serialGeneratorDialog.setPrototypeSerialLineEditText(serialGeneratorSettings_.serialGenerator.prototypeSerial());
+    serialGeneratorDialog.setDigitsCheckBox(serialGeneratorSettings_.serialGenerator.replaceWithDigits());
+    serialGeneratorDialog.setUppercaseCheckBox(serialGeneratorSettings_.serialGenerator.replaceWithUppercaseLetters());
+    serialGeneratorDialog.setLowercaseCheckBox(serialGeneratorSettings_.serialGenerator.replaceWithLowercaseLetters());
+    serialGeneratorDialog.setExportToFileCheckBox(serialGeneratorSettings_.doExport);
+    serialGeneratorDialog.setEnableCheckBox(serialGeneratorSettings_.enable);
+    serialGeneratorDialog.setAutogenerateCheckBox(serialGeneratorSettings_.autogenerate);
+    if (serialGeneratorDialog.exec() == QDialog::Accepted) {  // If the user clicks "OK"
+        QString prototypeSerial = serialGeneratorDialog.prototypeSerialLineEditText();
+        bool digit = serialGeneratorDialog.digitsCheckBoxIsChecked();
+        bool upper = serialGeneratorDialog.uppercaseCheckBoxIsChecked();
+        bool lower = serialGeneratorDialog.lowercaseCheckBoxIsChecked();
+        if (!SerialGenerator::isValidPrototypeSerial(prototypeSerial) || !SerialGenerator::isValidReplaceMode(digit, upper, lower)) {  // If the user entered invalid settings (i.e. the prototype serial number does not contain a wildcard character or no replacement option was selected)
+            QMessageBox::critical(this, tr("Error"), tr("The serial number generator settings are not valid and will not be applied.\n\nPlease verify that the prototype serial number contains at least one wildcard character (?) and that at least one replacement option is selected."));
+        } else {  // Valid settings
+            serialGeneratorSettings_.serialGenerator.setPrototypeSerial(prototypeSerial);
+            serialGeneratorSettings_.serialGenerator.setReplaceMode(digit, upper, lower);
+            serialGeneratorSettings_.doExport = serialGeneratorDialog.exportToFileCheckBoxIsChecked();
+            serialGeneratorSettings_.enable = serialGeneratorDialog.enableCheckBoxIsChecked();  // No further verification required, because "checkBoxEnable" is automatically unchecked if "checkBoxExportToFile" gets unchecked
+            serialGeneratorSettings_.autogenerate = serialGeneratorDialog.autogenerateCheckBoxIsChecked();  // Same as above, because "checkBoxAutogenerate" is automatically unchecked if "checkBoxExportToFile" gets unchecked
+        }
+    }
+}
+
 void ConfiguratorWindow::on_lineEditPID_textChanged(const QString &text)
 {
     if (text.size() < 4 || text == "0000") {
@@ -119,6 +147,11 @@ void ConfiguratorWindow::on_lineEditVID_textEdited(const QString &text)
     int curPosition = ui->lineEditVID->cursorPosition();
     ui->lineEditVID->setText(text.toLower());
     ui->lineEditVID->setCursorPosition(curPosition);
+}
+
+void ConfiguratorWindow::on_pushButtonGenerateSerial_clicked()
+{
+    ui->lineEditSerial->setText(serialGeneratorSettings_.serialGenerator.generateSerial());
 }
 
 // Partially disables configurator window

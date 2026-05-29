@@ -26,6 +26,7 @@
 #include <QString>
 #include "configuration.h"
 #include "mcp2221.h"
+#include "serialgeneratorsettings.h"
 
 namespace Ui {
 class ConfiguratorWindow;
@@ -45,16 +46,19 @@ public:
 private slots:
     void on_actionAbout_triggered();
     void on_actionSerialGeneratorEnable_toggled(bool checked);
+    void on_actionSerialGeneratorSettings_triggered();
     void on_lineEditPID_textChanged(const QString &text);
     void on_lineEditPID_textEdited(const QString &text);
     void on_lineEditVID_textChanged(const QString &text);
     void on_lineEditVID_textEdited(const QString &text);
+    void on_pushButtonGenerateSerial_clicked();
 
 private:
     Ui::ConfiguratorWindow *ui;
     Configuration deviceConfiguration_;
     MCP2221 mcp2221_;
     QString errmsg_, serialString_;
+    SerialGeneratorSettings serialGeneratorSettings_;
     bool err_, viewEnabled_ = false;
 
     void disableView();
