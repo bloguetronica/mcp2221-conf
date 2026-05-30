@@ -42,6 +42,7 @@ HEADERS += \
     libusb-extra.h \
     mainwindow.h \
     mcp2221.h \
+    mcp2221limits.h \
     serialgenerator.h \
     serialgeneratordialog.h \
     serialgeneratorsettings.h

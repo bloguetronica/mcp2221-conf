@@ -23,6 +23,7 @@
 #include <QRegExp>
 #include <QRegExpValidator>
 #include "common.h"
+#include "mcp2221limits.h"
 #include "serialgeneratordialog.h"
 #include "configuratorwindow.h"
 #include "ui_configuratorwindow.h"
@@ -117,6 +118,79 @@ void ConfiguratorWindow::on_actionSerialGeneratorSettings_triggered()
     }
 }
 
+void ConfiguratorWindow::on_lineEditManufacturer_textEdited(QString text)  // The variable "text" is passed by value here, because it needs to be modified locally!
+{
+    int curPosition = ui->lineEditManufacturer->cursorPosition();
+    ui->lineEditManufacturer->setText(text.replace('\n', ' '));
+    ui->lineEditManufacturer->setCursorPosition(curPosition);
+}
+
+void ConfiguratorWindow::on_lineEditMaxPower_editingFinished()
+{
+    ui->lineEditMaxPower->setText(QString::number(2 * (ui->lineEditMaxPower->text().toInt() / 2)));  // This removes any leading zeros and also rounds to the previous even number, if the value is odd
+}
+
+void ConfiguratorWindow::on_lineEditMaxPower_textChanged(const QString &text)
+{
+    if (text.isEmpty()) {
+        ui->lineEditMaxPower->setStyleSheet("background: rgb(255, 204, 0);");
+    } else {
+        ui->lineEditMaxPower->setStyleSheet("");
+    }
+}
+
+void ConfiguratorWindow::on_lineEditMaxPower_textEdited(QString text)  // The variable "text" is passed by value here, because it needs to be modified locally!
+{
+    int maxPower = text.toInt();
+    if (maxPower > 2 * MCP2221Limits::MAXPOW_MAX) {
+        text.chop(1);
+        ui->lineEditMaxPower->setText(text);
+        maxPower /= 10;
+    }
+    ui->lineEditMaxPowerHex->setText(QString("%1").arg(maxPower / 2, 2, 16, QChar('0')));  // This will autofill with up to two leading zeros
+}
+
+void ConfiguratorWindow::on_lineEditMaxPowerHex_editingFinished()
+{
+    if (ui->lineEditMaxPowerHex->text().size() < 2) {
+        ui->lineEditMaxPowerHex->setText(QString("%1").arg(ui->lineEditMaxPowerHex->text().toInt(nullptr, 16), 2, 16, QChar('0')));  // This will autofill with up to two leading zeros
+    }
+}
+
+void ConfiguratorWindow::on_lineEditMaxPowerHex_textChanged(const QString &text)
+{
+    if (text.isEmpty()) {
+        ui->lineEditMaxPowerHex->setStyleSheet("background: rgb(255, 204, 0);");
+    } else {
+        ui->lineEditMaxPowerHex->setStyleSheet("");
+    }
+}
+
+void ConfiguratorWindow::on_lineEditMaxPowerHex_textEdited(const QString &text)
+{
+    int curPosition = ui->lineEditMaxPowerHex->cursorPosition();
+    ui->lineEditMaxPowerHex->setText(text.toLower());
+    int maxPowerHex = text.toInt(nullptr, 16);
+    if (maxPowerHex > MCP2221Limits::MAXPOW_MAX) {
+        maxPowerHex = MCP2221Limits::MAXPOW_MAX;
+        ui->lineEditMaxPowerHex->setText(QString("%1").arg(MCP2221Limits::MAXPOW_MAX, 2, 16, QChar('0')));  // This will autofill with up to two leading zeros
+    }
+    ui->lineEditMaxPowerHex->setCursorPosition(curPosition);
+    ui->lineEditMaxPower->setText(QString::number(2 * maxPowerHex));
+}
+
+void ConfiguratorWindow::on_lineEditNewPassword_textChanged(const QString &text)
+{
+    ui->pushButtonRevealNewPassword->setEnabled(!text.isEmpty());
+    if (ui->lineEditNewPassword->text().isEmpty() || ui->lineEditNewPassword->text() != ui->lineEditRepeatPassword->text()) {
+        ui->lineEditNewPassword->setStyleSheet("background: rgb(255, 204, 0);");
+        ui->lineEditRepeatPassword->setStyleSheet("background: rgb(255, 204, 0);");
+    } else {
+        ui->lineEditNewPassword->setStyleSheet("");
+        ui->lineEditRepeatPassword->setStyleSheet("");
+    }
+}
+
 void ConfiguratorWindow::on_lineEditPID_textChanged(const QString &text)
 {
     if (text.size() < 4 || text == "0000") {
@@ -131,6 +205,25 @@ void ConfiguratorWindow::on_lineEditPID_textEdited(const QString &text)
     int curPosition = ui->lineEditPID->cursorPosition();
     ui->lineEditPID->setText(text.toLower());
     ui->lineEditPID->setCursorPosition(curPosition);
+}
+
+void ConfiguratorWindow::on_lineEditProduct_textEdited(QString text)  // The variable "text" is passed by value here, because it needs to be modified locally!
+{
+    int curPosition = ui->lineEditProduct->cursorPosition();
+    ui->lineEditProduct->setText(text.replace('\n', ' '));
+    ui->lineEditProduct->setCursorPosition(curPosition);
+}
+
+void ConfiguratorWindow::on_lineEditRepeatPassword_textChanged(const QString &text)
+{
+    ui->pushButtonRevealRepeatPassword->setEnabled(!text.isEmpty());
+    if (ui->lineEditNewPassword->text().isEmpty() || ui->lineEditNewPassword->text() != ui->lineEditRepeatPassword->text()) {
+        ui->lineEditNewPassword->setStyleSheet("background: rgb(255, 204, 0);");
+        ui->lineEditRepeatPassword->setStyleSheet("background: rgb(255, 204, 0);");
+    } else {
+        ui->lineEditNewPassword->setStyleSheet("");
+        ui->lineEditRepeatPassword->setStyleSheet("");
+    }
 }
 
 void ConfiguratorWindow::on_lineEditVID_textChanged(const QString &text)
@@ -152,6 +245,42 @@ void ConfiguratorWindow::on_lineEditVID_textEdited(const QString &text)
 void ConfiguratorWindow::on_pushButtonGenerateSerial_clicked()
 {
     ui->lineEditSerial->setText(serialGeneratorSettings_.serialGenerator.generateSerial());
+}
+
+void ConfiguratorWindow::on_pushButtonRevealNewPassword_pressed()
+{
+    ui->lineEditNewPassword->setEchoMode(QLineEdit::Normal);
+}
+
+void ConfiguratorWindow::on_pushButtonRevealNewPassword_released()
+{
+    ui->lineEditNewPassword->setEchoMode(QLineEdit::Password);
+}
+
+void ConfiguratorWindow::on_pushButtonRevealRepeatPassword_pressed()
+{
+    ui->lineEditRepeatPassword->setEchoMode(QLineEdit::Normal);
+}
+
+void ConfiguratorWindow::on_pushButtonRevealRepeatPassword_released()
+{
+    ui->lineEditRepeatPassword->setEchoMode(QLineEdit::Password);
+}
+
+void ConfiguratorWindow::on_radioButtonPasswordProtected_toggled(bool checked)
+{
+    if (checked == false) {
+        ui->lineEditNewPassword->clear();
+        ui->lineEditRepeatPassword->clear();
+    }
+    ui->checkBoxDoNotChangePassword->setChecked(checked && deviceConfiguration_.securityOptions.password && !deviceConfiguration_.securityOptions.lock);
+    ui->checkBoxDoNotChangePassword->setEnabled(checked && deviceConfiguration_.securityOptions.password && !deviceConfiguration_.securityOptions.lock);
+    ui->lineEditNewPassword->setEnabled(checked && !ui->checkBoxDoNotChangePassword->isChecked());
+    ui->lineEditNewPassword->setStyleSheet((checked && !ui->checkBoxDoNotChangePassword->isChecked()) ? "background: rgb(255, 204, 0);" : "");
+    ui->pushButtonRevealNewPassword->setEnabled(checked && !ui->checkBoxDoNotChangePassword->isChecked() && !ui->lineEditNewPassword->text().isEmpty());
+    ui->lineEditRepeatPassword->setEnabled(checked && !ui->checkBoxDoNotChangePassword->isChecked());
+    ui->lineEditRepeatPassword->setStyleSheet((checked && !ui->checkBoxDoNotChangePassword->isChecked()) ? "background: rgb(255, 204, 0);" : "");
+    ui->pushButtonRevealRepeatPassword->setEnabled(checked && !ui->checkBoxDoNotChangePassword->isChecked() && !ui->lineEditNewPassword->text().isEmpty());
 }
 
 // Partially disables configurator window
@@ -221,7 +350,7 @@ void ConfiguratorWindow::displayUSBParameters(const MCP2221::USBParameters &usbP
     ui->lineEditMaxPower->setText(QString::number(2 * usbParameters.maxpow));
     ui->lineEditMaxPowerHex->setText(QString("%1").arg(usbParameters.maxpow, 2, 16, QChar('0')));  // This will autofill with up to two leading zeros
     ui->comboBoxPowerMode->setCurrentIndex(usbParameters.powmode ? 1 : 0);
-    // TODO
+    ui->checkBoxRemoteWakeUpCapable->setChecked(usbParameters.rmwakeup);
 }
 
 // Determines the type of error and acts accordingly, always showing a message
@@ -262,7 +391,8 @@ void ConfiguratorWindow::setGeneralSettingsEnabled(bool value)
     ui->lineEditMaxPower->setReadOnly(!value);
     ui->lineEditMaxPowerHex->setReadOnly(!value);
     ui->comboBoxPowerMode->setEnabled(value);
-    // TODO
+    ui->checkBoxRemoteWakeUpCapable->setEnabled(value);
+    ui->groupBoxSecurityOptions->setEnabled(value);
 }
 
 // Checks for errors and validates device operations

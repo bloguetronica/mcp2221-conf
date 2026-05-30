@@ -47,11 +47,26 @@ private slots:
     void on_actionAbout_triggered();
     void on_actionSerialGeneratorEnable_toggled(bool checked);
     void on_actionSerialGeneratorSettings_triggered();
+    void on_lineEditManufacturer_textEdited(QString text);
+    void on_lineEditMaxPower_editingFinished();
+    void on_lineEditMaxPower_textChanged(const QString &text);
+    void on_lineEditMaxPower_textEdited(QString text);
+    void on_lineEditMaxPowerHex_editingFinished();
+    void on_lineEditMaxPowerHex_textChanged(const QString &text);
+    void on_lineEditMaxPowerHex_textEdited(const QString &text);
+    void on_lineEditNewPassword_textChanged(const QString &text);
     void on_lineEditPID_textChanged(const QString &text);
     void on_lineEditPID_textEdited(const QString &text);
+    void on_lineEditProduct_textEdited(QString text);
+    void on_lineEditRepeatPassword_textChanged(const QString &text);
     void on_lineEditVID_textChanged(const QString &text);
     void on_lineEditVID_textEdited(const QString &text);
     void on_pushButtonGenerateSerial_clicked();
+    void on_pushButtonRevealNewPassword_pressed();
+    void on_pushButtonRevealNewPassword_released();
+    void on_pushButtonRevealRepeatPassword_pressed();
+    void on_pushButtonRevealRepeatPassword_released();
+    void on_radioButtonPasswordProtected_toggled(bool checked);
 
 private:
     Ui::ConfiguratorWindow *ui;

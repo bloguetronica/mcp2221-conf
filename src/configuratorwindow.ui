@@ -84,6 +84,9 @@
       <property name="readOnly">
        <bool>true</bool>
       </property>
+      <property name="clearButtonEnabled">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QLabel" name="labelProduct">
       <property name="geometry">
@@ -116,6 +119,9 @@
       <property name="readOnly">
        <bool>true</bool>
       </property>
+      <property name="clearButtonEnabled">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QLabel" name="labelSerial">
       <property name="geometry">
@@ -146,6 +152,9 @@
        <number>30</number>
       </property>
       <property name="readOnly">
+       <bool>true</bool>
+      </property>
+      <property name="clearButtonEnabled">
        <bool>true</bool>
       </property>
      </widget>
@@ -219,6 +228,9 @@
       <property name="placeholderText">
        <string>0x</string>
       </property>
+      <property name="clearButtonEnabled">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QLineEdit" name="lineEditPID">
       <property name="geometry">
@@ -237,6 +249,9 @@
       </property>
       <property name="placeholderText">
        <string>0x</string>
+      </property>
+      <property name="clearButtonEnabled">
+       <bool>true</bool>
       </property>
      </widget>
      <widget class="QLabel" name="labelMaxPower">
@@ -267,6 +282,9 @@
       <property name="readOnly">
        <bool>true</bool>
       </property>
+      <property name="clearButtonEnabled">
+       <bool>true</bool>
+      </property>
      </widget>
      <widget class="QLineEdit" name="lineEditMaxPowerHex">
       <property name="geometry">
@@ -285,6 +303,9 @@
       </property>
       <property name="placeholderText">
        <string>0x</string>
+      </property>
+      <property name="clearButtonEnabled">
+       <bool>true</bool>
       </property>
      </widget>
      <widget class="QLabel" name="labelPowerMode">
@@ -400,6 +421,9 @@
        </property>
       </widget>
       <widget class="QLineEdit" name="lineEditNewPassword">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>220</x>
@@ -410,6 +434,12 @@
        </property>
        <property name="maxLength">
         <number>8</number>
+       </property>
+       <property name="echoMode">
+        <enum>QLineEdit::Password</enum>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
        </property>
       </widget>
       <widget class="QLabel" name="labelNewPassword">
@@ -449,6 +479,9 @@
        </property>
       </widget>
       <widget class="QLineEdit" name="lineEditRepeatPassword">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
        <property name="geometry">
         <rect>
          <x>220</x>
@@ -459,6 +492,12 @@
        </property>
        <property name="maxLength">
         <number>8</number>
+       </property>
+       <property name="echoMode">
+        <enum>QLineEdit::Password</enum>
+       </property>
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
        </property>
       </widget>
       <widget class="QLabel" name="labelRepeatPassword">
