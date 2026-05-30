@@ -6,6 +6,7 @@
     </qresource>
     <qresource prefix="/icons/buttons">
         <file>icons/buttons/cycle.png</file>
+        <file>icons/buttons/password-reveal.png</file>
     </qresource>
     <qresource prefix="/images">
         <file>images/banner.png</file>
